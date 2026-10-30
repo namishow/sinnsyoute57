@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本史探究 小テスト：初期議会と条約改正</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col justify-between min-h-screen p-3 md:p-6">
+
+    <!-- Header -->
+    <header class="max-w-3xl mx-auto w-full text-center my-3">
+        <div class="inline-flex items-center gap-1.5 bg-amber-400 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-full mb-2 shadow">
+            <i class="fa-solid fa-graduation-cap"></i> 高校日本史探究 プリントNo.57 完全網羅
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-wide shadow-text flex items-center justify-center gap-2">
+            <span>資本主義の成立と産業革命</span>
+        </h1>
+        <p class="text-indigo-200 text-xs md:text-sm mt-1">紡績・製糸業の逆転時期、八幡製鉄所、金本位制、四大財閥から寄生地主制まで！</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-2xl mx-auto w-full flex-grow flex items-center justify-center">
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center transition-all duration-300">
+            <div class="text-5xl text-amber-500 mb-3">
+                <i class="fa-solid fa-industry"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-2">日本史一問一答クイズ</h2>
+            <p class="text-gray-600 text-xs md:text-sm mb-5 leading-relaxed">
+                全16問の4択形式問題です。<br>
+                大阪紡績会社（渋沢栄一）・綿糸生糸の生産量/輸出量逆転年・八幡製鉄所（大冶鉄山）・金本位制（1897）・鉄道国有法（1906）・四大財閥（コンツェルン）・寄生地主制を完全網羅！
+            </p>
+
+            <div class="bg-indigo-50/80 rounded-2xl p-4 mb-6 text-left border border-indigo-100">
+                <h3 class="font-bold text-indigo-900 text-xs md:text-sm mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-500"></i> このクイズの特徴
+                </h3>
+                <ul class="text-xs text-indigo-800 space-y-1.5">
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 正解・不正解の和風効果音（BGM/SE）付き</li>
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 選択肢の答えの番号は完全均等（1~4各4問ずつ）</li>
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 産業革命の超重要「年号・逆転時期まとめカード」搭載</li>
+                </ul>
+            </div>
+
+            <button onclick="startQuiz()" class="pulse-animation w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-black text-lg py-3.5 px-8 rounded-2xl shadow-lg hover:shadow-indigo-500/50 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> テストを開始する！
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="glass-card rounded-3xl p-5 md:p-7 shadow-2xl w-full hidden transition-all duration-300">
+            <!-- Progress & Stats -->
+            <div class="flex justify-between items-center mb-3 pb-3 border-b border-gray-200">
+                <div class="flex items-center gap-2">
+                    <span id="question-number" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q.1 / 16</span>
+                    <span id="combo-badge" class="hidden bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-bounce">
+                        <i class="fa-solid fa-fire"></i> <span id="combo-count">0</span> コンボ!
+                    </span>
+                </div>
+                <div class="text-sm font-bold text-gray-600">
+                    スコア: <span id="current-score" class="text-indigo-600 font-black text-lg">0</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-5 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Text -->
+            <div class="mb-5">
+                <span id="question-category" class="text-xs font-bold text-indigo-600 tracking-wider uppercase">資本主義の成立 (No.57)</span>
+                <h3 id="question-text" class="text-base md:text-lg font-bold text-gray-800 mt-1 leading-snug">
+                    問題文がここに入ります。
+                </h3>
+            </div>
+
+            <!-- Options -->
+            <div id="options-container" class="space-y-2.5 mb-5">
+                <!-- Option buttons generated by JS -->
+            </div>
+
+            <!-- Feedback Area (Explanation) -->
+            <div id="explanation-card" class="hidden bg-slate-800 text-white rounded-2xl p-4 mb-4 border border-slate-700 animate-fade-in">
+                <div class="flex items-center gap-2 mb-1">
+                    <span id="result-icon" class="text-xl"></span>
+                    <h4 id="result-text" class="font-extrabold text-sm md:text-base">正解！</h4>
+                </div>
+                <p id="explanation-text" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+                    解説文がここに入ります。
+                </p>
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                次へ進む <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center hidden transition-all duration-300">
+            <div id="result-badge" class="inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-4xl mb-3 shadow-inner">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-1">テスト結果</h2>
+            <p id="result-rank" class="text-xs md:text-sm font-bold text-indigo-600 mb-4">ランク判定中...</p>
+
+            <div class="bg-indigo-50/80 rounded-2xl p-5 mb-5">
+                <div class="text-xs text-indigo-600 font-bold uppercase tracking-wider mb-1">最終スコア</div>
+                <div class="text-4xl md:text-5xl font-black text-indigo-900 mb-1">
+                    <span id="final-score">0</span> <span class="text-base font-normal text-indigo-700">/ 100 点</span>
+                </div>
+                <p id="correct-count-text" class="text-xs text-indigo-800">16問中 0問 正解</p>
+            </div>
+
+            <div id="result-comment" class="bg-white p-4 rounded-xl border border-gray-200 text-xs md:text-sm text-gray-700 mb-5 text-left leading-relaxed">
+                コメント
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2.5">
+                <button onclick="startQuiz()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-rotate-right"></i> もう一度挑戦
+                </button>
+                <button onclick="toggleMnemonicsModal()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-lightbulb"></i> 産業革命＆資本主義の要点整理
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Mnemonics Modal (暗記ポイント) -->
+    <div id="mnemonics-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button onclick="toggleMnemonicsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-black text-gray-800 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-key text-amber-500"></i> 資本主義の成立の要点まとめ
+            </h3>
+            <p class="text-xs text-gray-500 mb-4">プリントNo.57の最重要「逆転の年号」＆キーポイント！</p>
+
+            <div class="space-y-2.5 text-xs text-gray-700">
+                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                    <span class="font-bold text-amber-900 block mb-1">🔄 軽工業（紡績・製糸）の超重要「逆転年」：</span>
+                    <ul class="list-disc list-inside space-y-1 text-amber-950 font-bold">
+                        <li><b>1890年</b>：綿糸の<b>生産量</b>が輸入量を超える！</li>
+                        <li><b>1894年</b>：<b>器械製糸</b>の生産量が座繰製糸を超える！</li>
+                        <li><b>1897年</b>：綿糸の<b>輸出量</b>が輸入量を超える！</li>
+                        <li><b>1909年</b>：生糸の輸出量が<b>世界第1位</b>（清を抜く）＆綿布輸出量＞輸入量！</li>
+                    </ul>
+                </div>
+                <div class="p-2.5 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <span class="font-bold text-indigo-900 block mb-1">🏭 1897年（明治30年）の2大トピックス：</span>
+                    <ul class="list-disc list-inside space-y-1 text-indigo-900">
+                        <li><b>金本位制の確立</b>：貨幣法を制定。日清戦争の<b>賠償金（3億6450万円）</b>を準備金として実施。</li>
+                        <li><b>官営八幡製鉄所の設立</b>（1901年操業）：筑豊の石炭＋清国の<b>大冶（タイヤ）鉄山</b>の鉄鉱石。</li>
+                    </ul>
+                </div>
+                <div class="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <span class="font-bold text-emerald-900 block mb-1">🏢 財閥（コンツェルン）＆寄生地主制：</span>
+                    <p class="text-xs text-emerald-900 leading-relaxed">
+                        ・<b>四大財閥</b>：三井・三菱・住友・安田（持株会社を頂点とする独占形態＝コンツェルン）。<br>
+                        ・<b>寄生地主制</b>：地主が高額の現物小作料を徴収し株式・株式投資へ。小作農の娘（女工）が製糸・紡績工場で低賃金労働。
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="toggleMnemonicsModal()" class="w-full mt-5 bg-slate-800 text-white font-bold py-2.5 rounded-xl text-sm">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-indigo-200 py-3">
+        日本史探究 授業サポートアプリ | 資本主義の成立編
+    </footer>
+
+    <!-- JavaScript Quiz Logic & Web Audio API -->
+    <script>
+        // Sound System Implementation (Web Audio API)
+        class SoundSystem {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playCorrect() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc1 = this.ctx.createOscillator();
+                const osc2 = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'triangle';
+                osc1.frequency.setValueAtTime(523.25, now); // C5
+                osc1.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc1.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                osc1.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+
+                osc2.frequency.setValueAtTime(523.25, now);
+                osc2.frequency.setValueAtTime(659.25, now + 0.1);
+                osc2.frequency.setValueAtTime(783.99, now + 0.2);
+                osc2.frequency.setValueAtTime(1046.50, now + 0.3);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.6);
+                osc2.stop(now + 0.6);
+            }
+            playWrong() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.setValueAtTime(130, now + 0.15);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+            playFinish() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                    gain.gain.setValueAtTime(0.25, now + idx * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.12);
+                    osc.stop(now + idx * 0.12 + 0.4);
+                });
+            }
+        }
+        const sound = new SoundSystem();
+
+        // ==========================================
+        // Quiz Data (16 Questions - Balanced Answers 1-4: 4 of each)
+        // Correct answers distribution:
+        // Option 0 (1番) -> 4件 [Q1, Q5, Q9, Q13]
+        // Option 1 (2番) -> 4件 [Q2, Q6, Q10, Q14]
+        // Option 2 (3番) -> 4件 [Q3, Q7, Q11, Q15]
+        // Option 3 (4番) -> 4件 [Q4, Q8, Q12, Q16]
+        // ==========================================
+        const quizData = [
+            // Q1: 正解 = 1番 (index 0)
+            {
+                category: "1. 紡績業の産業革命 (No.57)",
+                question: "1883年に渋沢栄一らの提唱で設立され、イギリス製リング紡績機や蒸気機関を導入して昼夜2交代制で大成功を収め、企業勃興のきっかけとなった会社はどれか？",
+                options: [
+                    "大阪紡績会社",
+                    "富岡製糸場",
+                    "日本鉄道会社",
+                    "鐘淵紡績会社"
+                ],
+                answer: 0,
+                explanation: "渋沢栄一が中心となって創立した大阪紡績会社は、大規模な蒸気機関とリング紡績機を導入して深夜操業を行い、成功を収めました。"
+            },
+            // Q2: 正解 = 2番 (index 1)
+            {
+                category: "2. 綿糸生産と輸入の逆転 (No.57)",
+                question: "大阪紡績会社の成功などにより紡績会社設立ブームが起こり、日本の「綿糸の生産量が輸入量を超えた」年として正しいものはどれか？",
+                options: [
+                    "1886年",
+                    "1890年",
+                    "1897年",
+                    "1909年"
+                ],
+                answer: 1,
+                explanation: "1890年（明治23年）に国内の綿糸生産量が輸入量を上回りました。なお、綿糸の「輸出量」が輸入量を超えたのは1897年です。"
+            },
+            // Q3: 正解 = 3番 (index 2)
+            {
+                category: "3. 製糸業の技術転換 (No.57)",
+                question: "製糸業において、マニュファクチュア（工場手工業）経営による「器械製糸」の生産量が、従来の「座繰製糸（ざぐりせいし）」の生産量を超えた年として正しいものはどれか？",
+                options: [
+                    "1889年",
+                    "1890年",
+                    "1894年",
+                    "1901年"
+                ],
+                answer: 2,
+                explanation: "日清戦争が開戦した1894年（明治27年）に、器械製糸の生産量が伝統的な座繰製糸を追い抜きました。"
+            },
+            // Q4: 正解 = 4番 (index 3)
+            {
+                category: "4. 鉄道業の発達 (No.57)",
+                question: "1881年に華族らの資金を中心に設立されて成功し、民営鉄道会社設立ブームを引き起こした日本初の私営鉄道会社はどれか？",
+                options: [
+                    "阪神急行電鉄",
+                    "山陽鉄道会社",
+                    "九州鉄道会社",
+                    "日本鉄道会社"
+                ],
+                answer: 3,
+                explanation: "1881年に設立された「日本鉄道会社」（東京〜青森間の建設を目指した）の成功により私鉄ブームが起こり、1889年には民営鉄道の営業キロ数が官営を超えました。"
+            },
+            // Q5: 正解 = 1番 (index 0)
+            {
+                category: "5. 官営八幡製鉄所 (No.57)",
+                question: "1897年に設立され1901年に操業を開始した官営八幡製鉄所において、鉄鉱石の主な供給源となった清国の鉱山はどこか？",
+                options: [
+                    "大冶（タイヤ）鉄山",
+                    "鞍山（アンシャン）鉄山",
+                    "本渓湖（ホンシーフー）鉄山",
+                    "撫順（ブジュン）炭鉱"
+                ],
+                answer: 0,
+                explanation: "八幡製鉄所は、筑豊炭田の石炭と、清国（中国）の「大冶鉄山」からの鉄鉱石、およびドイツの技術を導入して設立されました。"
+            },
+            // Q6: 正解 = 2番 (index 1)
+            {
+                category: "6. 金本位制の確立 (No.57)",
+                question: "1897年の貨幣法制定により確立された「金本位制」において、その準備金（基礎）として活用された資金は何か？",
+                options: [
+                    "アメリカからの海外借款",
+                    "日清戦争の賠償金",
+                    "金輸出解禁による正貨",
+                    "関税自主権の獲得による税収"
+                ],
+                answer: 1,
+                explanation: "下関条約で獲得した日清戦争の賠償金（3億6450万円、英ポンドで受取）を準備金とすることで、1897年に金本位制が確立しました。"
+            },
+            // Q7: 正解 = 3番 (index 2)
+            {
+                category: "7. 鉄道の国有化 (No.57)",
+                question: "日露戦争後の1906年に制定され、軍事上の要請や輸送の円滑化を目的に全国の主要私鉄（17社）を買収して国有化した法律は何か？",
+                options: [
+                    "鉄道敷設法",
+                    "造船奨励法",
+                    "鉄道国有法",
+                    "産業開発法"
+                ],
+                answer: 2,
+                explanation: "1906年の「鉄道国有法」により幹線鉄道が国有化され、広大な鉄道網が国家管理下に置かれました。"
+            },
+            // Q8: 正解 = 4番 (index 3)
+            {
+                category: "8. 重工業・工作機械の発達 (No.57)",
+                question: "1905年に国産初のアメリカ式旋盤（工作機械）を完成させ、日本の機械工業の自立に貢献した工場はどこか？",
+                options: [
+                    "芝浦製作所",
+                    "日本製鋼所",
+                    "三菱長崎造船所",
+                    "池貝鉄工所"
+                ],
+                answer: 3,
+                explanation: "「池貝鉄工所」は1905年に標準的なアメリカ式旋盤を完成させ、日本の工作機械の技術水準を大きく向上させました。"
+            },
+            // Q9: 正解 = 1番 (index 0)
+            {
+                category: "9. 生糸輸出の世界一 (No.57)",
+                question: "日本の生糸輸出量が、それまで世界最大産出国であった清国を抜いて「世界第一位」となった年として正しいものはどれか？",
+                options: [
+                    "1909年",
+                    "1894年",
+                    "1901年",
+                    "1915年"
+                ],
+                answer: 0,
+                explanation: "1909年（明治42年）に日本の生糸輸出量は清国を抜いて世界第1位となり、日本の貴重な外貨獲得源となりました。"
+            },
+            // Q10: 正解 = 2番 (index 1)
+            {
+                category: "10. 織機技術の発達 (No.57)",
+                question: "木製手織機から小型の力織機を発明・普及させ、後の日本の自動車産業（トヨタ）の礎を築いた人物は誰か？",
+                options: [
+                    "鮎川義介",
+                    "豊田佐吉",
+                    "野口遵",
+                    "大河内正敏"
+                ],
+                answer: 1,
+                explanation: "豊田佐吉は木製力織機や自動織機を発明し、農村の副業や小規模な織物業の機械化に大きく貢献しました。"
+            },
+            // Q11: 正解 = 3番 (index 2)
+            {
+                category: "11. 財閥の支配形態 (No.57)",
+                question: "三井・三菱・住友・安田などの四大財閥が採用した、持株会社（財閥本社）が株式保有や金融を通じて多種多様な企業の株式を支配する最高形態の独占組織を何と呼ぶか？",
+                options: [
+                    "カルテル",
+                    "トラスト",
+                    "コンツェルン",
+                    "シンジケート"
+                ],
+                answer: 2,
+                explanation: "持株会社（三井合名会社、三菱合資会社など）を中心に多分野の企業をピラミッド状に傘下に収める独占形態を「コンツェルン」と呼びます。"
+            },
+            // Q12: 正解 = 4番 (index 3)
+            {
+                category: "12. 寄生地主制の特徴 (No.57)",
+                question: "明治後期に確立した「寄生地主制」において、地主が小作農から徴収していた小作料の形態として正しいものはどれか？",
+                options: [
+                    "定額の現金小作料",
+                    "地価に応じた定率の金銭小作料",
+                    "労働で支払う労役小作料",
+                    "高額の現物（米）小作料"
+                ],
+                answer: 3,
+                explanation: "日本の寄生地主制では、地主は小作農から高率の「現物（米）小作料」を徴収し、自らは直接農業経営を行わず、株式や債券投資へ回りました。"
+            },
+            // Q13: 正解 = 1番 (index 0)
+            {
+                category: "13. 特殊銀行の設立 (No.57)",
+                question: "農工上の改良や長期金融を目的に1897年に設立され、地方の農工銀行を傘下に置いた特殊銀行はどれか？",
+                options: [
+                    "日本勧業銀行",
+                    "日本興業銀行",
+                    "横浜正金銀行",
+                    "朝鮮銀行"
+                ],
+                answer: 0,
+                explanation: "1897年に「日本勧業銀行」が設立され、農業や不動産に対する長期低利金融を担当しました（重工業向けの長期金融は1902年の「日本興業銀行」）。"
+            },
+            // Q14: 正解 = 2番 (index 1)
+            {
+                category: "14. 植民地との貿易構造 (No.57)",
+                question: "資本主義の確立期において、日本の植民地（朝鮮・台湾）および勢力圏（満州）から日本へ主に輸入された品目の組み合わせとして正しいものはどれか？",
+                options: [
+                    "朝鮮：綿花 ／ 満州：絹織物",
+                    "朝鮮：米 ／ 満州：大豆粕（肥料）",
+                    "台湾：羊毛 ／ 朝鮮：鉄鉱石",
+                    "満州：生糸 ／ 台湾：石炭"
+                ],
+                answer: 1,
+                explanation: "日本へは朝鮮・台湾から「米・砂糖」が移入され、満州からは農業肥料として必須だった「大豆粕（だいずかす）」が輸入されました。"
+            },
+            // Q15: 正解 = 3番 (index 2)
+            {
+                category: "15. 軍需重工業会社の設立 (No.57)",
+                question: "1907年、兵器の国産化を目指して北海道室蘭に設立された、官民合同（日本製鋼所）の国策重工業会社はどれか？",
+                options: [
+                    "中島飛行機",
+                    "昭和電工",
+                    "日本製鋼所",
+                    "日産コンツェルン"
+                ],
+                answer: 2,
+                explanation: "1907年、英国の兵器会社との提携により「日本製鋼所」が室蘭に設立され、大砲などの兵器製造が行われました。"
+            },
+            // Q16: 正解 = 4番 (index 3)
+            {
+                category: "16. 遠洋航路の開拓 (No.57)",
+                question: "1885年に設立された日本郵船会社が、1893年に開設し、輸入綿花（インド産）の輸送で日本の紡績業発展に寄与した日本初の遠洋定期航路はどこか？",
+                options: [
+                    "シアトル航路",
+                    "ロンドン航路",
+                    "サンフランシスコ航路",
+                    "ボンベイ航路"
+                ],
+                answer: 3,
+                explanation: "1893年に開通した「ボンベイ航路」（インド）により、安いインド産安価綿花の安定的輸入が可能になり、日本の紡績業が世界市場へ躍進しました。"
+            }
+        ];
+
+        // ... existing quiz logic script ...
+        let currentIdx = 0;
+        let score = 0;
+        let combo = 0;
+        let correctNum = 0;
+        let isAnswered = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const questionNumber = document.getElementById('question-number');
+        const comboBadge = document.getElementById('combo-badge');
+        const comboCount = document.getElementById('combo-count');
+        const currentScoreEl = document.getElementById('current-score');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        const explanationCard = document.getElementById('explanation-card');
+        const resultIcon = document.getElementById('result-icon');
+        const resultText = document.getElementById('result-text');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+
+        function startQuiz() {
+            currentIdx = 0;
+            score = 0;
+            combo = 0;
+            correctNum = 0;
+            isAnswered = false;
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            isAnswered = false;
+            const q = quizData[currentIdx];
+
+            questionNumber.textContent = `Q.${currentIdx + 1} / ${quizData.length}`;
+            currentScoreEl.textContent = score;
+            progressBar.style.width = `${((currentIdx) / quizData.length) * 100}%`;
+
+            if (combo > 1) {
+                comboBadge.classList.remove('hidden');
+                comboCount.textContent = combo;
+            } else {
+                comboBadge.classList.add('hidden');
+            }
+
+            questionCategory.textContent = q.category;
+            questionText.textContent = q.question;
+
+            optionsContainer.innerHTML = '';
+            explanationCard.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm transition-all duration-200 border-2 border-gray-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/50 flex justify-between items-center group shadow-sm`;
+                btn.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-700 text-xs font-black group-hover:bg-indigo-600 group-hover:text-white shrink-0">${idx + 1}</span>
+                        <span>${opt}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-gray-300 group-hover:text-indigo-400 shrink-0 ml-2"></i>
+                `;
+                btn.onclick = () => checkAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIdx, selectedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const q = quizData[currentIdx];
+            const buttons = optionsContainer.querySelectorAll('button');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIdx === q.answer) {
+                sound.playCorrect();
+                correctNum++;
+                combo++;
+                const gainedScore = 10 + (combo > 1 ? combo * 2 : 0);
+                score += gainedScore;
+
+                selectedBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-emerald-500 bg-emerald-50 text-emerald-950 flex justify-between items-center shadow";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-xl shrink-0 ml-2";
+
+                resultIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                resultText.textContent = `正解！ (+${gainedScore}pt)`;
+                resultText.className = "font-extrabold text-sm md:text-base text-emerald-400";
+            } else {
+                sound.playWrong();
+                combo = 0;
+
+                selectedBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-rose-500 bg-rose-50 text-rose-950 flex justify-between items-center shadow";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-600 text-xl shrink-0 ml-2";
+
+                const correctBtn = buttons[q.answer];
+                correctBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-emerald-500 bg-emerald-50 text-emerald-950 flex justify-between items-center shadow";
+                correctBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-xl shrink-0 ml-2";
+
+                resultIcon.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                resultText.textContent = "不正解...";
+                resultText.className = "font-extrabold text-sm md:text-base text-rose-400";
+            }
+
+            explanationText.textContent = q.explanation;
+            explanationCard.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            currentScoreEl.textContent = score;
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < quizData.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            sound.playFinish();
+
+            const finalScoreEl = document.getElementById('final-score');
+            const correctCountText = document.getElementById('correct-count-text');
+            const resultRank = document.getElementById('result-rank');
+            const resultComment = document.getElementById('result-comment');
+            const resultBadge = document.getElementById('result-badge');
+
+            const calculatedScore = Math.min(100, Math.round((correctNum / quizData.length) * 100));
+            finalScoreEl.textContent = calculatedScore;
+            correctCountText.textContent = `${quizData.length}問中 ${correctNum}問 正解`;
+
+            if (calculatedScore === 100) {
+                resultRank.textContent = "🏆 ランク：産業革命・資本主義マスター（SS級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>完璧な成績です！</strong><br>大阪紡績会社・年号逆転・八幡製鉄所・金本位制・四大財閥まで完全にマスターしています！`;
+            } else if (calculatedScore >= 80) {
+                resultRank.textContent = "🥇 ランク：渋沢栄一級 実業家（A級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-indigo-100 text-indigo-600 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>素晴らしい高得点です！</strong><br>綿糸・生糸の逆転時期や特殊銀行の知識が完璧に整理できています！`;
+            } else if (calculatedScore >= 50) {
+                resultRank.textContent = "🥈 ランク：八幡製鉄所・技師級（B級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-slate-100 text-slate-600 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>基本知識はバッチリです！</strong><br>1890年（綿糸生産＞輸入）と1897年（綿糸輸出＞輸入・金本位制）の違いを再確認しておきましょう！`;
+            } else {
+                resultRank.textContent = "🥉 ランク：要復習！経済史見習い（C級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-rose-100 text-rose-500 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>伸びしろ十分！</strong><br>授業プリントNo.57を見直して、紡績業・製糸業の変遷と四大財閥・寄生地主制の仕組みを整理してみよう！`;
+            }
+        }
+
+        function toggleMnemonicsModal() {
+            const modal = document.getElementById('mnemonics-modal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
